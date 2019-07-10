@@ -9,11 +9,11 @@ const tags = [
     'ITEM000005',
     'ITEM000005-2',
 ];
+//数据库商品列表
 const allItems = loadAllItems();
+//促销产品表
 const promotionItems = loadPromotions();
-function printReceipt(collection) {
-
-}
+//判断输入的商品中是否存在不合法输入或者数据库不存在的商品输入数据
 function isValid(barcodes) {
     let isValid = true;
     let isExsit = false;
@@ -34,6 +34,7 @@ function isValid(barcodes) {
     }
     return isValid;
 }
+//获得输入的商品列表统计值
 function getBuyedGoods(barcodes) {
     let buyedGoods = [];
     barcodes.filter(function (item) {
@@ -53,6 +54,7 @@ function getBuyedGoods(barcodes) {
     })
     return buyedGoods;
 }
+//判断是此商品ID的商品是否在促销
 function isInPromotion(goodId) {
     let flag = false;
     promotionItems[0].barcodes.forEach((element) => {
@@ -61,19 +63,23 @@ function isInPromotion(goodId) {
     })
     return flag;
 }
+//打印收据
 function printReceipt(barcodes) {
     let receipt = "***<没钱赚商店>收据***\n";
+    //金额总计
     let totalSum = 0;
+    //优惠金额
     let reduce = 0;
+    //购买的商品列表
     let buyedGoods = getBuyedGoods(barcodes);
-    buyedGoods.forEach(function (goodNumber, goodId) {  
+    buyedGoods.forEach(function (goodNumber, goodId) {
         if (goodNumber != undefined) {
             let sum = allItems[goodId].price * goodNumber;
             if (goodNumber >= 3) {
                 if (isInPromotion(goodId)) {
                     let decrease = Math.floor(goodNumber / 3);
                     let after = goodNumber - decrease;
-                    sum =  after * allItems[goodId].price;
+                    sum = after * allItems[goodId].price;
                     reduce += decrease * allItems[goodId].price
                 }
             }

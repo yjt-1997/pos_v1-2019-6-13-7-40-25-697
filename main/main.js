@@ -8,10 +8,10 @@ const tags = [
     'ITEM000003-2.5',
     'ITEM000005',
     'ITEM000005-2',
-  ];
+];
 const allItems = loadAllItems();
 function printReceipt(collection) {
-    
+
 }
 function isValid(barcodes) {
     let isValid = true;
@@ -43,7 +43,13 @@ function getBuyedGoods(barcodes) {
             if (buyedGoods[goodId] == undefined)
                 buyedGoods[goodId] = number;
             else buyedGoods[goodId] += number;
+        }else{
+            let goodId = parseInt(item.substr(4).trim());
+            if (buyedGoods[goodId] == undefined)
+                buyedGoods[goodId] = 1;
+            else buyedGoods[goodId] += 1;
         }
     })
+    return buyedGoods;
 }
-console.log(isValid(tags));
+console.log(getBuyedGoods(tags));

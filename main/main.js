@@ -10,6 +10,7 @@ const tags = [
     'ITEM000005-2',
 ];
 const allItems = loadAllItems();
+const promotionItems = loadPromotions();
 function printReceipt(collection) {
 
 }
@@ -43,7 +44,7 @@ function getBuyedGoods(barcodes) {
             if (buyedGoods[goodId] == undefined)
                 buyedGoods[goodId] = number;
             else buyedGoods[goodId] += number;
-        }else{
+        } else {
             let goodId = parseInt(item.substr(4).trim());
             if (buyedGoods[goodId] == undefined)
                 buyedGoods[goodId] = 1;
@@ -52,4 +53,25 @@ function getBuyedGoods(barcodes) {
     })
     return buyedGoods;
 }
-console.log(getBuyedGoods(tags));
+function isInPromotion(goodId){
+    let flag = false;
+    promotionItems[0].barcodes.forEach((element) => {
+        if(parseInt(element.substr(4))==goodId)
+           flag = true;
+    })
+    return flag;
+}
+function printReceipt(buyedGoods) {
+    let receipt = "***<没钱赚商店>收据***\n";
+    buyedGoods.forEach(function (goodNumber, goodId) {
+        if(goodNumber!=undefined){
+            if(goodNumber>=3){
+                //if()
+                let decrease = goodNumber%3;
+                goodNumber -= decrease;
+                receipt += "名称："+allItems;
+            }
+        }
+    });
+}
+console.log(isInPromotion(4));

@@ -53,25 +53,35 @@ function getBuyedGoods(barcodes) {
     })
     return buyedGoods;
 }
-function isInPromotion(goodId){
+function isInPromotion(goodId) {
     let flag = false;
     promotionItems[0].barcodes.forEach((element) => {
-        if(parseInt(element.substr(4))==goodId)
-           flag = true;
+        if (parseInt(element.substr(4)) == goodId)
+            flag = true;
     })
     return flag;
 }
-function printReceipt(buyedGoods) {
+function printReceipt(barcodes) {
     let receipt = "***<没钱赚商店>收据***\n";
-    buyedGoods.forEach(function (goodNumber, goodId) {
-        if(goodNumber!=undefined){
-            if(goodNumber>=3){
-                //if()
-                let decrease = goodNumber%3;
-                goodNumber -= decrease;
-                receipt += "名称："+allItems;
+    let totalSum = 0;
+    let reduce = 0;
+    let buyedGoods = getBuyedGoods(barcodes);
+    buyedGoods.forEach(function (goodNumber, goodId) {  
+        if (goodNumber != undefined) {
+            let sum = allItems[goodId].price * goodNumber;
+            if (goodNumber >= 3) {
+                if (isInPromotion(goodId)) {
+                    let decrease = Math.floor(goodNumber / 3);
+                    let after = goodNumber - decrease;
+                    sum =  after * allItems[goodId].price;
+                    reduce += decrease * allItems[goodId].price
+                }
             }
+            totalSum += sum;
+            receipt += `名称：${allItems[goodId].name}，数量：${goodNumber}${allItems[goodId].unit}，单价：${allItems[goodId].price.toFixed(2)}(元)，小计：${sum.toFixed(2)}(元)\n`;
         }
     });
+    receipt += `----------------------\n总计：${totalSum.toFixed(2)}(元)\n节省：${reduce.toFixed(2)}(元)\n**********************`;
+    console.log(receipt);
 }
-console.log(isInPromotion(4));
+printReceipt(tags);
